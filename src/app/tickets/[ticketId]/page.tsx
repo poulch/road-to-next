@@ -1,7 +1,26 @@
-const TicketPage = async ({ params }: PageProps<'/tickets/[ticketId]'>) => {
-    const { ticketId } = await params;
+import { initialTickets } from "@/data";
 
-    return <h3 className="text-3xl font-bold underline">Ticket {ticketId}</h3>;
+type TicketPageProps = {
+    params: Promise<{
+        ticketId: string;
+    }>;
 };
 
-export default TicketPage
+const TicketPage = async ({ params }: TicketPageProps) => {
+    const { ticketId } = await params;
+
+    const ticket = initialTickets.find((ticket) => ticket.id === ticketId);
+
+    if (!ticket) {
+        return <div>Ticket not found</div>;
+    }
+
+    return (
+        <div>
+            <h2 className="text-lg">{ticket.title}</h2>
+            <p className="text-sm">{ticket.content}</p>
+        </div>
+    );
+};
+
+export default TicketPage;
