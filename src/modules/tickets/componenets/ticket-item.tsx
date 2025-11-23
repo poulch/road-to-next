@@ -12,6 +12,7 @@ type TicketItemProps = {
     isDetail?: boolean;
 };
 
+
 const TicketItem = ({ ticket, isDetail }: TicketItemProps) => {
     const detailButton = (
         <Button variant="outline" size="icon" asChild>
