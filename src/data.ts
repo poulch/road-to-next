@@ -1,14 +1,16 @@
-export const initialTickets = [
+import { Ticket } from "./modules/tickets/types";
+
+export const initialTickets: Ticket[] = [
     {
         id: "1",
         title: "Ticket 1",
         content: "This is the first ticket.",
-        status: "DONE" as const,
+        status: "DONE",
     },
     {
         id: "2",
         title: "Ticket 2",
         content: "This is the second ticket.",
-        status: "OPEN" as const,
+        status: "OPEN",
     },
 ];
