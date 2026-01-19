@@ -4,21 +4,27 @@ import { ActionState } from "./utils/to-action-state";
 
 type FormProps = {
     action: (payload: FormData) => void;
+    onSuccess?: () => void;
+    onError?: () => void;
     actionState: ActionState;
     children: React.ReactNode;
 };
 
-const Form = ({ action, actionState, children }: FormProps) => {
+const Form = ({ action, actionState, children, onError, onSuccess }: FormProps) => {
     useActionFeedback(actionState, {
         onSuccess: ({ actionState }) => {
             if (actionState.message) {
                 toast.success(actionState.message);
             }
+
+            onSuccess?.()
         },
         onError: ({ actionState }) => {
             if (actionState.message) {
                 toast.error(actionState.message);
             }
+
+            onError?.()
         },
     });
 

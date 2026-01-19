@@ -8,10 +8,13 @@ import { ActionState, fromErrorToActionState, toActionState } from "@/components
 import { prisma } from "@/lib/prisma"
 import { ticketsPath } from "@/paths";
 import { cookieKeys } from "@/types";
+import { toCent } from "@/utils/currency";
 
 const upsertTicketSchema = z.object({
     title: z.string().min(1).max(191),
-    content: z.string().min(1).max(1024)
+    content: z.string().min(1).max(1024),
+    deadline: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+    bounty: z.coerce.number().positive()
 })
 
 export const upsertTicket = async (ticketId: string | undefined,
@@ -19,19 +22,28 @@ export const upsertTicket = async (ticketId: string | undefined,
     formData: FormData) => {
     const title = formData.get('title')
     const content = formData.get('content')
+    const deadline = formData.get('deadline')
+    const bounty = formData.get('bounty')
 
     try {
         const data = upsertTicketSchema.parse({
             title: title as string,
             content: content as string,
+            deadline: deadline as string,
+            bounty: bounty,
         })
+
+        const dbData = {
+            ...data,
+            bounty: toCent(data.bounty),
+        }
 
         await prisma.ticket.upsert({
             "where": {
                 "id": ticketId || ""
             },
-            create: data,
-            update: data
+            create: dbData,
+            update: dbData
         })
     } catch (error) {
         return fromErrorToActionState(error, formData)
