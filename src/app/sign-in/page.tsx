@@ -1,0 +1,33 @@
+import Link from "next/link";
+import { CardCompact } from "@/components/card-compact";
+import { SignInForm } from "@/modules/auth/componenets/sing-in-form"
+import { forgotPasswordPath, signUpPath } from "@/paths";
+
+const SignInPage = () => {
+    return (
+        <div className="flex-1 flex flex-col justify-center items-center">
+            <CardCompact
+                title="Sign Up"
+                description="Create an account to get started"
+                className="w-full max-w-[420px] animate-fade-from-top"
+                content={<SignInForm />}
+                footer={
+                    <>
+                        <Link className="text-sm text-muted-foreground" href={signUpPath()}>
+                            No account yet?
+                        </Link>
+
+                        <Link
+                            className="text-sm text-muted-foreground"
+                            href={forgotPasswordPath()}
+                        >
+                            Forgot Password?
+                        </Link>
+                    </>
+                }
+            />
+        </div>
+    );
+}
+
+export default SignInPage
